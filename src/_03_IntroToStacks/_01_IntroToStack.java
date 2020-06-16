@@ -19,13 +19,18 @@ public class _01_IntroToStack {
 		}
 		//3. Ask the user to enter in two numbers between 0 and 100, inclusive. 
 		
-		String y=JOptionPane.showInputDialog("Enter in two numbers between 0 and 100, inclusive.");
-		
+		String y=JOptionPane.showInputDialog("Enter in two numbers between 0 and 100, inclusive; have a space between and put the smaller number in the front.");
+		String[] o=y.split(" ");
+		int u=Integer.parseInt(o[0]);
+		int p=Integer.parseInt(o[1]);
 		//4. Pop all the elements off of the Stack. Every time a double is popped that is
 		//   between the two numbers entered by the user, print it to the screen.
 		for (int i = 0; i < s.size(); i++) {
 			double h=s.pop();
-			if(h)
+			if(u<h&&h<p) {
+				System.out.println(h);
+				}
+			}
 		}
 		
 		//   EXAMPLE:
@@ -42,4 +47,4 @@ public class _01_IntroToStack {
 		//   66.47984807
 		//   74.12121224
 	}
-}
+
