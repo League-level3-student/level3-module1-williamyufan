@@ -15,14 +15,15 @@ import javax.swing.JPanel;
 public class HangMan implements KeyListener, ActionListener {
 	Stack<String> words = new Stack<String>();
 	JFrame frame = new JFrame();
+	JFrame frame1=new JFrame();
 	JPanel panel = new JPanel();
+	JPanel panel1=new JPanel();
 	JLabel label = new JLabel();
 	JLabel label2 = new JLabel("lives: 10");
-	JButton yes = new JButton();
-	JButton no = new JButton();
+	JButton yes = new JButton("yes");
+	JButton no = new JButton("no");
 	int lives = 10;
 	String u = "";
-	
 
 	public static void main(String[] args) {
 		HangMan lcc = new HangMan();
@@ -56,6 +57,7 @@ public class HangMan implements KeyListener, ActionListener {
 		int y = 0;
 		u = words.pop();
 		y = u.length();
+		System.out.println(u);
 
 		String q = "";
 		for (int i = 0; i < y; i++) {
@@ -79,7 +81,9 @@ public class HangMan implements KeyListener, ActionListener {
 		String newLabel = "";
 		boolean hasMatch = false;
 		for (int j = 0; j < u.length(); j++) {
+			
 			if (character == u.charAt(j)) {
+				System.out.println(character);
 				newLabel = i.substring(0, j * 2);
 				newLabel += u.charAt(j);
 				newLabel += i.substring(j * 2 + 1, i.length());
@@ -88,12 +92,25 @@ public class HangMan implements KeyListener, ActionListener {
 			}
 
 		}
-	
+
 		if (hasMatch == false) {
 			label2.setText("lives: " + lives--);
 		}
 		label.setText(newLabel);
-	
+
+		if (lives == -1) {
+			lives = 10;
+			JOptionPane.showMessageDialog(null, "Game over, you are ok.");
+			panel1.add(yes);
+			panel1.add(no);
+			frame1.add(panel1);
+			frame1.setVisible(true);
+			frame1.pack();
+			yes.addActionListener(this);
+			no.addActionListener(this);
+
+		}
+
 		if (!label.getText().contains("_")) {
 			int y = 0;
 			u = words.pop();
@@ -124,18 +141,22 @@ public class HangMan implements KeyListener, ActionListener {
 				label.setText(p);
 			}
 
+			if (lives == -1) {
+				lives = 10;
+				JOptionPane.showMessageDialog(null, "Game over, you are ok.");
+				panel1.add(yes);
+				panel1.add(no);
+				frame1.add(panel1);
+				frame1.setVisible(true);
+				frame1.pack();
+				
+				yes.addActionListener(this);
+				no.addActionListener(this);
+
+			}
 		}
 
-		
-	System.out.println(lives);
-	if (lives == 0) {
-		JOptionPane.showMessageDialog(null, "Game over, you are ok.");
-		panel.add(yes);
-		panel.add(no);
-		yes.addActionListener(this);
 	}
-	}
-	
 
 	@Override
 	public void keyReleased(KeyEvent e) {
@@ -147,12 +168,11 @@ public class HangMan implements KeyListener, ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if (e.getSource() == yes) {
+			frame1.dispose();
 			hangman();
+
 		} else if (e.getSource() == no) {
 			System.exit(JFrame.EXIT_ON_CLOSE);
 		}
 	}
-	}
-	
-
-	
+}
