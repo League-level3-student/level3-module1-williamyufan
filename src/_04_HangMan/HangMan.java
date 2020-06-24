@@ -113,7 +113,10 @@ public class HangMan implements KeyListener, ActionListener {
 
 		if (!label.getText().contains("_")) {
 			int y = 0;
+			if(!words.empty()) {
 			u = words.pop();
+			return;
+			}
 
 			y = u.length();
 
@@ -125,7 +128,7 @@ public class HangMan implements KeyListener, ActionListener {
 				String a = label.getText();
 				String p = "";
 				boolean hasMatch1 = false;
-				for (int j = 0; j < u.length(); j++) {
+				for (int j = 0; j*2+1 < u.length(); j++) {
 					if (character == u.charAt(j)) {
 						p = a.substring(0, j * 2);
 						p += u.charAt(j);

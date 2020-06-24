@@ -40,6 +40,8 @@ public class _02_LogSearch implements ActionListener {
 	JButton searchUsingID = new JButton("Search Using ID");
 	JButton viewList = new JButton("View List (admin only)");
 	JButton removeID = new JButton("Remove ID");
+	String Name = "";
+	int q = 0;
 
 	public static void main(String[] args) {
 		_02_LogSearch lcc = new _02_LogSearch();
@@ -67,8 +69,7 @@ public class _02_LogSearch implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		String Name = "";
-		int q = 0;
+
 		if (e.getSource() == addEntry) {
 			String IDNumber = "";
 			IDNumber = JOptionPane.showInputDialog("Enter a ID number. Just numbers, please!");
@@ -80,42 +81,46 @@ public class _02_LogSearch implements ActionListener {
 			String id = "";
 			id = JOptionPane.showInputDialog("Enter your ID number to search for your name.");
 			int w = Integer.parseInt(id);
-			for (int i = 0; i < logsearch.size(); i++) {
-				if (q == w) {
-					JOptionPane.showMessageDialog(null, "Your name is: " + logsearch.get(q));
-				} else {
-					JOptionPane.showMessageDialog(null, "You do not have a entry.");
-				}
 
+			if (logsearch.get(w)!=null) {
+				JOptionPane.showMessageDialog(null, "Your name is: " + logsearch.get(w));
+			} else  {
+				JOptionPane.showMessageDialog(null, "You do not have a entry.");
 			}
 
 		} else if (e.getSource() == viewList) {
 			String password = "";
 			String actualPassWord = "givemelist";
 			password = JOptionPane.showInputDialog("Enter the password please.");
-			if (actualPassWord == password) {
+			if (password.equals(actualPassWord)) {
 
-				for (int i = 0; i < logsearch.size(); i++) {
+				JOptionPane.showMessageDialog(null, "ID: " + q + " Name: " + logsearch.get(q) + "\n");
 
-					JOptionPane.showMessageDialog(null, "ID: " + q + "Name: " + logsearch.get(q) + "\n");
+			} else {
+				JOptionPane.showMessageDialog(null, "Wrong password! Try again");
+				password = JOptionPane.showInputDialog("Enter the password please.");
+				if (password.equals(actualPassWord)) {
+
+					JOptionPane.showMessageDialog(null, "ID: " + q + " Name: " + logsearch.get(q) + "\n");
+
 				}
+
 			}
 
 		} else if (e.getSource() == removeID) {
-			String things="";
-			int s=0;
-			things=JOptionPane.showInputDialog("Enter your ID to remove.");
-			s=Integer.parseInt(things);
-			for (int i = 0; i < logsearch.size(); i++) {
-				if(s==q) {
-					
-				}
-				else {
-					JOptionPane.showMessageDialog(null, "Your ID does not exist.");
-				}
-			}
+			String things = "";
+			int s = 0;
+			things = JOptionPane.showInputDialog("Enter your ID to remove.");
+			s = Integer.parseInt(things);
 
+			if (s == q) {
+				logsearch.put(q, null);
+				JOptionPane.showMessageDialog(null, "Your entry has been removed");
+			} else {
+				JOptionPane.showMessageDialog(null, "Your ID does not exist.");
+			}
 		}
 
 	}
+
 }
