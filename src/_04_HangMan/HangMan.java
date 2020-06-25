@@ -15,15 +15,16 @@ import javax.swing.JPanel;
 public class HangMan implements KeyListener, ActionListener {
 	Stack<String> words = new Stack<String>();
 	JFrame frame = new JFrame();
-	JFrame frame1=new JFrame();
+
 	JPanel panel = new JPanel();
-	JPanel panel1=new JPanel();
+	JPanel panel1 = new JPanel();
 	JLabel label = new JLabel();
 	JLabel label2 = new JLabel("lives: 10");
+
 	JButton yes = new JButton("yes");
 	JButton no = new JButton("no");
 	int lives = 10;
-	String u = "";
+	String chosenWord = "";
 
 	public static void main(String[] args) {
 		HangMan lcc = new HangMan();
@@ -32,18 +33,40 @@ public class HangMan implements KeyListener, ActionListener {
 
 	public void hangman() {
 
-		String v = JOptionPane
-				.showInputDialog("How many words would you like to guess? Enter a number between 1 and 267.");
-		int x = Integer.parseInt(v);
+		
 		frame.add(panel);
+
 		panel.add(label);
 		panel.add(label2);
+		panel1.add(yes);
+		panel1.add(no);
 		frame.addKeyListener(this);
 		frame.setVisible(true);
 		frame.setLocation(500, 600);
-		frame.pack();
+
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+	start();
+		
+		
+		reset();
+		frame.pack();
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+	
+	void start()
+	{
+		words=new Stack<String>();
+	
+		String v = JOptionPane
+				.showInputDialog("How many words would you like to guess? Enter a number between 1 and 267.");
+		int x = Integer.parseInt(v);
+		
 		for (int i = 0; i < x; i++) {
 			String h = Utilities.readRandomLineFromFile("dictionary.txt");
 
@@ -54,110 +77,64 @@ public class HangMan implements KeyListener, ActionListener {
 			}
 
 		}
-		int y = 0;
-		u = words.pop();
-		y = u.length();
-		System.out.println(u);
+		chosenWord = words.pop();
+	}
 
+	void reset() {
+		System.out.println(chosenWord);
+		lives = 10;
 		String q = "";
-		for (int i = 0; i < y; i++) {
+		for (int i = 0; i < chosenWord.length(); i++) {
 			q += "_ ";
 			label.setText(q);
 		}
-
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
 		char character = e.getKeyChar();
-		String i = label.getText();
+		String displayText = label.getText();
 		String newLabel = "";
 		boolean hasMatch = false;
-		for (int j = 0; j < u.length(); j++) {
-			
-			if (character == u.charAt(j)) {
+		for (int j = 0; j < chosenWord.length(); j++) {
+
+			if (character == chosenWord.charAt(j)) {
 				System.out.println(character);
-				newLabel = i.substring(0, j * 2);
-				newLabel += u.charAt(j);
-				newLabel += i.substring(j * 2 + 1, i.length());
+				newLabel = displayText.substring(0, j * 2);
+				newLabel += chosenWord.charAt(j);
+				newLabel += displayText.substring(j * 2 + 1, displayText.length());
+				displayText = newLabel;
 				hasMatch = true;
-
 			}
-
 		}
 
 		if (hasMatch == false) {
-			label2.setText("lives: " + lives--);
+			label2.setText("lives: " + --lives);
+		} else {
+			label.setText(newLabel);
 		}
-		label.setText(newLabel);
 
-		if (lives == -1) {
-			lives = 10;
+		if (lives == 0) {
+
 			JOptionPane.showMessageDialog(null, "Game over, you are ok.");
-			panel1.add(yes);
-			panel1.add(no);
-			frame1.add(panel1);
-			frame1.setVisible(true);
-			frame1.pack();
+
+			frame.remove(panel);
+			frame.add(panel1);
 			yes.addActionListener(this);
 			no.addActionListener(this);
 
 		}
 
 		if (!label.getText().contains("_")) {
-			int y = 0;
-			if(!words.empty()) {
-			u = words.pop();
-			return;
-			}
-
-			y = u.length();
-
-			String q = "";
-			for (int o = 0; o < y; o++) {
-				q += "_ ";
-				label.setText(q);
-				char m = e.getKeyChar();
-				String a = label.getText();
-				String p = "";
-				boolean hasMatch1 = false;
-				for (int j = 0; j*2+1 < u.length(); j++) {
-					if (character == u.charAt(j)) {
-						p = a.substring(0, j * 2);
-						p += u.charAt(j);
-						p += a.substring(j * 2 + 1, i.length());
-						hasMatch1 = true;
-
-					}
-
-				}
-				if (hasMatch1 == false) {
-					label2.setText("lives: " + lives--);
-				}
-				label.setText(p);
-			}
-
-			if (lives == -1) {
-				lives = 10;
-				JOptionPane.showMessageDialog(null, "Game over, you are ok.");
-				panel1.add(yes);
-				panel1.add(no);
-				frame1.add(panel1);
-				frame1.setVisible(true);
-				frame1.pack();
-				
-				yes.addActionListener(this);
-				no.addActionListener(this);
+			if (!words.empty()) {
+				chosenWord = words.pop();
+				reset();
 
 			}
 		}
+
+		frame.pack();
 
 	}
 
@@ -171,8 +148,11 @@ public class HangMan implements KeyListener, ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if (e.getSource() == yes) {
-			frame1.dispose();
-			hangman();
+			frame.remove(panel1);
+			start();
+			frame.add(panel);
+			reset();
+			frame.pack();
 
 		} else if (e.getSource() == no) {
 			System.exit(JFrame.EXIT_ON_CLOSE);
